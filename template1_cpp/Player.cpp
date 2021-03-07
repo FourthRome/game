@@ -30,6 +30,9 @@ bool Player::Pricked(std::string& chars, int obstX, int obstY, int futureX, int 
     else return false;
 }
 
+
+
+
 bool Player::Exited(std::string& chars, int obstX, int obstY, int futureX, int futureY) {
     if (chars[(CNT_HEIGHT - 1 - obstY) * (CNT_WIDTH + 1) + obstX] == 'x' &&
         futureX <= obstX * TILE_WIDTH + TILE_WIDTH &&
