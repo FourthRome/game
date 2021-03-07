@@ -14,7 +14,7 @@ GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
 
 int startX{}, startY{}, posExitX{}, posExitY{};
-bool flag_prick{}, flag_exit{}, flag_FinalExit{};
+bool flag_fall{}, flag_exit{}, flag_final_exit{};
 int curX = 0;
 int curY = WINDOW_HEIGHT - TILE_HEIGHT;
 
@@ -54,13 +54,13 @@ void OnKeyboardPressed(GLFWwindow* window, int key, int scancode, int action, in
 void processPlayerMovement(Player& player, std::string& chars)
 {
 	if (Input.keys[GLFW_KEY_W])
-		player.ProcessInput(MovementDir::UP, chars, flag_prick, flag_exit, flag_FinalExit);
+		player.ProcessInput(MovementDir::UP, chars, flag_fall, flag_exit, flag_final_exit);
 	else if (Input.keys[GLFW_KEY_S])
-		player.ProcessInput(MovementDir::DOWN, chars, flag_prick, flag_exit, flag_FinalExit);
+		player.ProcessInput(MovementDir::DOWN, chars, flag_fall, flag_exit, flag_final_exit);
 	if (Input.keys[GLFW_KEY_A])
-		player.ProcessInput(MovementDir::LEFT, chars, flag_prick, flag_exit, flag_FinalExit);
+		player.ProcessInput(MovementDir::LEFT, chars, flag_fall, flag_exit, flag_final_exit);
 	else if (Input.keys[GLFW_KEY_D])
-		player.ProcessInput(MovementDir::RIGHT, chars, flag_prick, flag_exit, flag_FinalExit);
+		player.ProcessInput(MovementDir::RIGHT, chars, flag_fall, flag_exit, flag_final_exit);
 }
 
 void OnMouseButtonClicked(GLFWwindow* window, int button, int action, int mods)
@@ -151,7 +151,7 @@ void readArray(std::string chars, Image& screenBuffer, Image& floor, Image& wall
 	for (int i = 0; i < chars.size(); i++) {
 		switch (chars[i]) {
 			case ' ':
-				draw(curX, curY, screenBuffer, floor);
+				//draw(curX, curY, screenBuffer, floor);
 				break;
 			case '.':
 				draw(curX, curY, screenBuffer, floor);
@@ -185,8 +185,8 @@ void readArray(std::string chars, Image& screenBuffer, Image& floor, Image& wall
 
 void restoreBackGround(Image& screenBuffer, Image& picture, Player& man) {
 
-	int numY = (int) trunc(man.GetOldCoords().y / TILE_HEIGHT);
-	int numX = (int) trunc(man.GetOldCoords().x / TILE_WIDTH);
+	int numY = (int) trunc(man.GetOldCoords().y) / TILE_HEIGHT;
+	int numX = (int) trunc(man.GetOldCoords().x) / TILE_WIDTH;
 	draw(numX * TILE_WIDTH, numY * TILE_HEIGHT, screenBuffer, picture);
 	draw((numX + 1) * TILE_WIDTH, numY * TILE_HEIGHT, screenBuffer, picture);
 	draw(numX * TILE_WIDTH, (numY + 1) * TILE_HEIGHT, screenBuffer, picture);
@@ -276,8 +276,8 @@ int main(int argc, char** argv) {
 		player.DrawOfPlayer(screenBuffer, floor, man);
 		if (flag_exit) {
 			flag_exit = false;
-			flag_prick = false;
-			flag_FinalExit = false;
+			flag_fall = false;
+			flag_final_exit = false;
 			switch (arrOfTypes[indexOfTypes++]) {
 			case 'A':
 				charsCur = chars1;
@@ -298,12 +298,12 @@ int main(int argc, char** argv) {
 			}
 		}
 
-		if (flag_prick) {
+		if (flag_fall) {
 			curX = 0;
 			curY = 0;
 			draw(curX, curY, screenBuffer, gameOver);
 		} 
-		if (flag_FinalExit) {
+		if (flag_final_exit) {
 			curX = 0;
 			curY = 0;
 			draw(curX, curY, screenBuffer, gameWin);
