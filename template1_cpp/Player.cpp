@@ -11,7 +11,8 @@
 //}
 
 char Player::Elem(std::string& chars, int obstX, int obstY, int futureX, int futureY) {
-    return chars[(CNT_HEIGHT - 1 - obstY) * (CNT_WIDTH + 1) + obstX];
+    try { return chars[(CNT_HEIGHT - 1 - obstY) * (CNT_WIDTH + 1) + obstX]; }
+    catch (...) { std::cout << "wrong indexes obstX = " << obstX << " obstY = " << obstY << std::endl; }
 }
 
 bool Player::CheckCoords(std::string& chars, int obstX, int obstY, int futureX, int futureY) {
@@ -120,10 +121,10 @@ void Player::ProcessInput(MovementDir dir, std::string& chars, bool& flag_prick,
         obstX = coords.x / TILE_WIDTH;
         obstY = coords.y / TILE_HEIGHT;
         if (CheckCoords(chars, obstX, obstY, futureX, futureY)) {
-            if (Elem(chars, obstX, obstY, futureX, futureY) == '#' || Elem(chars, obstX, obstY, futureX, futureY) == ' ') {
+            if (Elem(chars, obstX, obstY, futureX, futureY) == '#') {
                 break;
             }
-            else if (Elem(chars, obstX, obstY, futureX, futureY) == 'T') {
+            else if (Elem(chars, obstX, obstY, futureX, futureY) == 'T' || Elem(chars, obstX, obstY, futureX, futureY) == ' ') {
                 flag_prick = true;
             }
             else if (Elem(chars, obstX, obstY, futureX, futureY) == 'x') {
@@ -159,6 +160,8 @@ void Player::ProcessInput(MovementDir dir, std::string& chars, bool& flag_prick,
         futureY = coords.y;
         obstX = coords.x / TILE_WIDTH + 2;
         obstY = coords.y / TILE_HEIGHT;
+        //std::cout << "futureX = " << futureX << " futureY = " << futureY
+        //    << " obstX = " << obstX << " obstY = " << obstY << std::endl;
         if (Crached(chars, obstX, obstY, futureX, futureY)) {
             break;
         }
