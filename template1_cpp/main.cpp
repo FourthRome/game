@@ -217,21 +217,21 @@ int main(int argc, char** argv) {
 
 
 	Image screenBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, 4);// 4 - number of channels
-	Image floor("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\floor.png");
-	Image wall("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\wall.png");
-	Image man("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\man.png");
-	Image thorn("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\thorn.png");
-	Image exit("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\exit.png");
-	Image gameOver("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\gameOver.jpg");
-	Image gameWin("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\win.png");
+	Image floor("resources\\floor.png");
+	Image wall("resources\\wall.png");
+	Image man("resources\\man.png");
+	Image thorn("resources\\thorn.png");
+	Image exit("resources\\exit.png");
+	Image gameOver("resources\\gameOver.jpg");
+	Image gameWin("resources\\win.png");
 
 
 	std::string chars1 = "", chars2 = "", chars3 = "", chars4 = "", arrOfTypes = "";
-	openFiles("D:\\VsProjects\\Clone_repository\\template1_cpp\\room1.txt", chars1);
-	openFiles("D:\\VsProjects\\Clone_repository\\template1_cpp\\room2.txt", chars2);
-	openFiles("D:\\VsProjects\\Clone_repository\\template1_cpp\\room3.txt", chars3);
-	openFiles("D:\\VsProjects\\Clone_repository\\template1_cpp\\room4.txt", chars4);
-	openFiles("D:\\VsProjects\\Clone_repository\\template1_cpp\\Common_plan.txt", arrOfTypes);
+	openFiles("resources\\room1.txt", chars1);
+	openFiles("resources\\room2.txt", chars2);
+	openFiles("resources\\room3.txt", chars3);
+	openFiles("resources\\room4.txt", chars4);
+	openFiles("resources\\common_plan.txt", arrOfTypes);
 	char type;
 	startX = 150;
 	startY = 150;
@@ -419,7 +419,7 @@ int main(int argc, char** argv) {
 //	
 //    // Загрузка изображения, создание текстуры и генерирование мипмап-уровней
 //    int width, height, nrChannels;
-//    unsigned char* data = stbi_load("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\man_min.png", &width, &height, &nrChannels, 0);
+//    unsigned char* data = stbi_load("resources\\man_min.png", &width, &height, &nrChannels, 0);
 //    if (data) {
 //        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 //        glGenerateMipmap(GL_TEXTURE_2D);
