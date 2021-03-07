@@ -33,3 +33,13 @@
 *.exe
 *.out
 *.app
+
+*.vcxproj*
+*/CMakeCache.txt
+*/bin
+*/CMakeFiles
+*.dir
+*x64
+*ALL_BUILD*
+*cmake_install.cmake
+*.sln

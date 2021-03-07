@@ -214,21 +214,21 @@ int main(int argc, char** argv) {
 	
 
 	Image screenBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, 4);// 4 - number of channels
-	Image floor("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\floor2_min.png");
-	Image wall("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\wall2_min.png");
-	Image man("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\man_min.png");
-	Image thorn("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\thorn2_min.png");
-	Image exit("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\exit_min.png");
-	Image gameOver("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\game-over.jpg");
+	Image floor("resources\\floor2_min.png");
+	Image wall("resources\\wall2_min.png");
+	Image man("resources\\man_min.png");
+	Image thorn("resources\\thorn2_min.png");
+	Image exit("resources\\exit_min.png");
+	Image gameOver("resources\\game-over.jpg");
 	//Image exitEnd("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\exitEnd_min.png");
 
 	
 	std::string chars1 = "", chars2 = "", chars3 = "", chars4 = "";
-	openFiles("D:\\VsProjects\\Clone_repository\\template1_cpp\\room1.txt", chars1);
-	openFiles("D:\\VsProjects\\Clone_repository\\template1_cpp\\room2.txt", chars2);
-	openFiles("D:\\VsProjects\\Clone_repository\\template1_cpp\\room3.txt", chars3);
-	openFiles("D:\\VsProjects\\Clone_repository\\template1_cpp\\room4.txt", chars4);
-	std::ifstream common_file("D:\\VsProjects\\Clone_repository\\template1_cpp\\Common_plan.txt");
+	openFiles("resources\\room1.txt", chars1);
+	openFiles("resources\\room2.txt", chars2);
+	openFiles("resources\\room3.txt", chars3);
+	openFiles("resources\\room4.txt", chars4);
+	std::ifstream common_file("resources\\Common_plan.txt");
 	char type;
 	startX = 150;
 	startY = 150;

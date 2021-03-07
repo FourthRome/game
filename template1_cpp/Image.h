@@ -35,12 +35,12 @@ struct Image
   Pixel* Data()        { return  data; }
 
   Pixel GetPixel(int x, int y) {
-      try { return data[width * (height - y - 1) + x];}
+      try { return data[width * (height -y - 1) + x];}
       catch (...) { std::cout << "wrong indexes x = " << x << " y = " << y << std::endl; }
   }
 	  
   void  PutPixel(int x, int y, const Pixel& pix) {
-      try { data[width * (height - y - 1) + x] = pix;}
+      try { data[width * y + x] = pix;}
       catch (...) { std::cout << "wrong indexes x = " << x << " y = " << y << std::endl; }
   }
   
