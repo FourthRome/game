@@ -24,10 +24,10 @@ struct Player
 
     void ProcessInput(MovementDir dir, std::string& chars, bool& flag_prick, bool& flag_exit, bool& flag_FinalExit);
     void DrawOfPlayer(Image& screen, Image& floor, Image& man);
-    char Elem(std::string& str, int a_obst, int b_obst, int a_future, int b_future);
+    char Elem(std::string& str, int a_obst, int b_obst);
     bool CheckCoords(std::string& chars, int obstX, int obstY, int futureX, int futureY);
-    void Player::UpdateFlags(bool& local_flag_break, bool& flag_fall, bool& flag_exit, bool& flag_FinalExit, 
-        std::string& chars, int obstX, int obstY, int futureX, int futureY);
+    void Player::UpdateFlags(bool& local_flag_break, bool& flag_fall, bool& flag_exit, bool& flag_FinalExit,
+        std::string& chars, int obstX, int obstY);
     Point GetOldCoords() { return old_coords; }
 
 private:

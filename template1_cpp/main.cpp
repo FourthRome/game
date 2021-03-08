@@ -17,6 +17,8 @@ int startX{}, startY{}, posExitX{}, posExitY{};
 bool flag_fall{}, flag_exit{}, flag_final_exit{};
 int curX = 0;
 int curY = WINDOW_HEIGHT - TILE_HEIGHT;
+char types[16 * 16]{};
+//vector<char> a{};
 
 
 struct InputState
@@ -148,45 +150,58 @@ void readArray(std::string chars, Image& screenBuffer, Image& floor, Image& wall
 	startY = posExitY;
 	//int curY = 0;
 
+	int j = 0;
 	for (int i = 0; i < chars.size(); i++) {
+
+		int x = j % 16;
+		int y = j / 16;
+
 		switch (chars[i]) {
-			case ' ':
-				//draw(curX, curY, screenBuffer, floor);
-				break;
-			case '.':
-				draw(curX, curY, screenBuffer, floor);
-				break;
-			case '#':
-				draw(curX, curY, screenBuffer, wall);
-				break;
-			case '@':
-				startX = curX;// +man.Width();
-				startY = curY;// man.Height();
-				//draw(curX, curY, screenBuffer, man);
-				break;
-			case 'T':
-				draw(curX, curY, screenBuffer, thorn);
-				break;
-			case 'x':
-				posExitX = curX;
-				posExitY = curY;
-				draw(curX, curY, screenBuffer, exit);
-				break;
-			case 'Q':
-				draw(curX, curY, screenBuffer, exit);
-				break;
-			default: break;
+		case ' ':
+			//draw(curX, curY, screenBuffer, floor);
+			break;
+		case '.':
+			draw(curX, curY, screenBuffer, floor);
+			break;
+		case '#':
+			draw(curX, curY, screenBuffer, wall);
+			break;
+		case '@':
+			startX = curX;// +man.Width();
+			startY = curY;// man.Height();
+			//draw(curX, curY, screenBuffer, man);
+			break;
+		case 'T':
+			draw(curX, curY, screenBuffer, thorn);
+			break;
+		case 'x':
+			posExitX = curX;
+			posExitY = curY;
+			draw(curX, curY, screenBuffer, exit);
+			break;
+		case 'Q':
+			draw(curX, curY, screenBuffer, exit);
+			break;
+		default: break;
 		}
-		if (chars[i] == '\n') { curX = 0; curY -= wall.Height(); }
-		else { curX += wall.Width(); }
-		std::cout << chars[i];
+		if (chars[i] == '\n') {
+			curX = 0;
+			curY -= wall.Height();
+		}
+		else {
+			curX += wall.Width();
+			types[(16 - 1 - y) * 16 + x] = chars[i];
+			j++;
+		}
+		//std::cout << chars[i];
 	}
 }
 
 void restoreBackGround(Image& screenBuffer, Image& picture, Player& man) {
 
-	int numY = (int) trunc(man.GetOldCoords().y) / TILE_HEIGHT;
-	int numX = (int) trunc(man.GetOldCoords().x) / TILE_WIDTH;
+	int numY = (int)trunc(man.GetOldCoords().y / TILE_HEIGHT); // here should trunc all brackets
+	int numX = (int)trunc(man.GetOldCoords().x / TILE_WIDTH); // here should trunc all brackets
+	//std::cout << "numX = " << numX << " numY = " << numY << std::endl;
 	draw(numX * TILE_WIDTH, numY * TILE_HEIGHT, screenBuffer, picture);
 	draw((numX + 1) * TILE_WIDTH, numY * TILE_HEIGHT, screenBuffer, picture);
 	draw(numX * TILE_WIDTH, (numY + 1) * TILE_HEIGHT, screenBuffer, picture);
@@ -220,23 +235,23 @@ int main(int argc, char** argv) {
 
 
 	Image screenBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, 4);// 4 - number of channels
-	Image floor("resources\\floor.png");
-	Image wall("resources\\wall.png");
-	Image man("resources\\man.png");
-	Image thorn("resources\\thorn.png");
-	Image exit("resources\\exit.png");
-	Image gameOver("resources\\gameOver.jpg");
-	Image gameWin("resources\\win.jpg");
+	Image floor("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\floor.png");
+	Image wall("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\wall.png");
+	Image man("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\man.png");
+	Image thorn("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\thorn.png");
+	Image exit("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\exit.png");
+	Image gameOver("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\gameOver.jpg");
+	Image gameWin("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\win.jpg");
 
 
 
 	std::string chars1 = "", chars2 = "", chars3 = "", chars4 = "", arrOfTypes = "";
-	openFiles("resources\\room1.txt", chars1);
-	openFiles("resources\\room2.txt", chars2);
-	openFiles("resources\\room3.txt", chars3);
-	openFiles("resources\\room4.txt", chars4);
-	openFiles("resources\\common_plan.txt", arrOfTypes);
-	
+	openFiles("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\room1.txt", chars1);
+	openFiles("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\room2.txt", chars2);
+	openFiles("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\room3.txt", chars3);
+	openFiles("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\room4.txt", chars4);
+	openFiles("D:\\VsProjects\\Clone_repository\\template1_cpp\\resources\\common_plan.txt", arrOfTypes);
+
 	startX = 150;
 	startY = 150;
 
@@ -264,7 +279,7 @@ int main(int argc, char** argv) {
 	//game loop
 	while (!glfwWindowShouldClose(window))
 	{
-		GLfloat currentFrame = (GLfloat) glfwGetTime();
+		GLfloat currentFrame = (GLfloat)glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 		glfwPollEvents();
@@ -302,7 +317,7 @@ int main(int argc, char** argv) {
 			curX = 0;
 			curY = 0;
 			draw(curX, curY, screenBuffer, gameOver);
-		} 
+		}
 		if (flag_final_exit) {
 			curX = 0;
 			curY = 0;
