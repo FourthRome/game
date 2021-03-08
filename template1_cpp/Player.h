@@ -28,9 +28,16 @@ struct Player
     bool CheckCoords(std::string& chars, int obstX, int obstY, int futureX, int futureY);
     void Player::UpdateFlags(bool& local_flag_break, bool& flag_fall, bool& flag_exit, bool& flag_FinalExit,
         std::string& chars, int obstX, int obstY);
+    Point GetCoords() { return coords; }
     Point GetOldCoords() { return old_coords; }
+    void PutCoords(int x, int y) { coords.x = x; coords.y = y; } // void PutCoords(int x, int y, Point coords) {...}
+    //void PutStartCoords(int x, int y) { start_coords.x = x; start_coords.y = y; } //void PutStartCoords(int x, int y, Point coords) { ... }
+
 
 private:
+    //int startX{};
+    //int startY{};
+    //Point start_coords{ .x = 150, .y = 150 };
     Point coords{ .x = 150, .y = 150 };
     Point old_coords{ .x = 150, .y = 150 };
     Pixel color{ .r = 255, .g = 0, .b = 0, .a = 1 }; //here, color of game_square

@@ -27,18 +27,15 @@ struct Image
 
   int Save(const std::string &a_path);
 
-  char Type()    const { return type; }
   int Width()    const { return width; }
   int Height()   const { return height; }
   int Channels() const { return channels; }
   size_t Size()  const { return size; }
   Pixel* Data()        { return  data; }
-
   Pixel GetPixel(int x, int y) {
       try { return data[width * (height -y - 1) + x];}
       catch (...) { std::cout << "wrong indexes x = " << x << " y = " << y << std::endl; }
-  }
-	  
+  }  
   void  PutPixel(int x, int y, const Pixel& pix) {
       try { data[width * y + x] = pix;}
       catch (...) { std::cout << "wrong indexes x = " << x << " y = " << y << std::endl; }
@@ -53,7 +50,6 @@ private:
   size_t size = 0;
   Pixel *data = nullptr;
   bool self_allocated = false;
-  char type = '.';
 };
 
 

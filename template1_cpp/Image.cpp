@@ -15,13 +15,6 @@ Image::Image(const std::string &a_path)
     size = width * height * channels;
     std::cout << "sizeof(data)" << sizeof(data) / sizeof(Pixel) << std::endl;
   }
-  if (a_path.find("floor") != std::string::npos) type = 'F';
-  if (a_path.find("wall") != std::string::npos) type = 'W';
-  if (a_path.find("man") != std::string::npos) type = 'M';
-  if (a_path.find("thorn") != std::string::npos) type = 'T';
-  if (a_path.find("exit") != std::string::npos) type = 'E';
-   
-  
 }
 
 Image::Image(int a_width, int a_height, int a_channels)
@@ -35,7 +28,6 @@ Image::Image(int a_width, int a_height, int a_channels)
     size = a_width * a_height * a_channels;
     channels = a_channels;
     self_allocated = true;
-    type = 'F';
   }
 }
 

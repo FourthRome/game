@@ -4,11 +4,7 @@
 
 #include <GLFW/glfw3.h>
 #include <SFML/Graphics.hpp>
-//#include "stb_image.h"
 #include <iostream>
-
-//constexpr GLsizei WINDOW_WIDTH = 512, WINDOW_HEIGHT = 512;
-//constexpr GLsizei TILE_WIDTH = 32, TILE_HEIGHT = 32;
 
 GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
@@ -17,8 +13,7 @@ int startX{}, startY{}, posExitX{}, posExitY{};
 bool flag_stop{}, flag_fall{}, flag_exit{}, flag_final_exit{};
 int curX = 0;
 int curY = WINDOW_HEIGHT - TILE_HEIGHT;
-char types[16 * 16]{};
-//vector<char> a{};
+double EPSILON = 0.00001;
 
 
 struct InputState
@@ -122,7 +117,7 @@ int initGL()
 	return 0;
 }
 
-void draw(const int curX, const int curY, Image& screenBuffer, Image& picture) {
+void drawTile(const int curX, const int curY, Image& screenBuffer, Image& picture) {
 	for (int i = 0; i < picture.Width(); ++i)
 		for (int j = 0; j < picture.Height(); ++j)
 			screenBuffer.PutPixel(curX + i, curY + j, picture.GetPixel(i, j));
@@ -141,48 +136,42 @@ void openFiles(const std::string& path, std::string& chars) {
 	else { std::cout << "ERROR::COULDN'T OPEN FILE:" << path << std::endl; }
 }
 
-void readArray(std::string chars, Image& screenBuffer, Image& floor, Image& wall, Image& man, Image& thorn, Image& exit) {
+void drawRoom(std::string chars, Image& screenBuffer, Image& floor, Image& wall, Image& man, Image& thorn, Image& exit, Image& finalExit) {
 
 	curX = 0;
 	curY = WINDOW_HEIGHT - TILE_HEIGHT;
 
-	startX = posExitX;
+	startX = 0;
 	startY = posExitY;
-	//int curY = 0;
 
-	int j = 0;
 	for (int i = 0; i < chars.size(); i++) {
 
-		int x = j % 16;
-		int y = j / 16;
-
 		switch (chars[i]) {
-		case ' ':
-			//draw(curX, curY, screenBuffer, floor);
-			break;
-		case '.':
-			draw(curX, curY, screenBuffer, floor);
-			break;
-		case '#':
-			draw(curX, curY, screenBuffer, wall);
-			break;
-		case '@':
-			startX = curX;// +man.Width();
-			startY = curY;// man.Height();
-			//draw(curX, curY, screenBuffer, man);
-			break;
-		case 'T':
-			draw(curX, curY, screenBuffer, thorn);
-			break;
-		case 'x':
-			posExitX = curX;
-			posExitY = curY;
-			draw(curX, curY, screenBuffer, exit);
-			break;
-		case 'Q':
-			draw(curX, curY, screenBuffer, exit);
-			break;
-		default: break;
+			case ' ':
+				break;
+			case '.':
+				drawTile(curX, curY, screenBuffer, floor);
+				break;
+			case '#':
+				drawTile(curX, curY, screenBuffer, wall);
+				break;
+			case '@':
+				chars[i] = '.';
+				startX = curX;
+				startY = curY;
+				break;
+			case 'T':
+				drawTile(curX, curY, screenBuffer, thorn);
+				break;
+			case 'x':
+				posExitX = 0;
+				posExitY = curY;
+				drawTile(curX, curY, screenBuffer, exit);
+				break;
+			case 'Q':
+				drawTile(curX, curY, screenBuffer, finalExit);
+				break;
+			default: break;
 		}
 		if (chars[i] == '\n') {
 			curX = 0;
@@ -190,10 +179,8 @@ void readArray(std::string chars, Image& screenBuffer, Image& floor, Image& wall
 		}
 		else {
 			curX += wall.Width();
-			types[(16 - 1 - y) * 16 + x] = chars[i];
-			j++;
+			
 		}
-		//std::cout << chars[i];
 	}
 }
 
@@ -201,10 +188,10 @@ void restoreBackGround(Image& screenBuffer, Image& picture, Player& man) {
 
 	int numY = (int) trunc(man.GetOldCoords().y / TILE_HEIGHT); // here should trunc all brackets
 	int numX = (int) trunc(man.GetOldCoords().x / TILE_WIDTH); // here should trunc all brackets
-	draw(numX * TILE_WIDTH, numY * TILE_HEIGHT, screenBuffer, picture);
-	draw((numX + 1) * TILE_WIDTH, numY * TILE_HEIGHT, screenBuffer, picture);
-	draw(numX * TILE_WIDTH, (numY + 1) * TILE_HEIGHT, screenBuffer, picture);
-	draw((numX + 1) * TILE_WIDTH, (numY + 1) * TILE_HEIGHT, screenBuffer, picture);
+	drawTile(numX * TILE_WIDTH, numY * TILE_HEIGHT, screenBuffer, picture);
+	drawTile((numX + 1) * TILE_WIDTH, numY * TILE_HEIGHT, screenBuffer, picture);
+	drawTile(numX * TILE_WIDTH, (numY + 1) * TILE_HEIGHT, screenBuffer, picture);
+	drawTile((numX + 1) * TILE_WIDTH, (numY + 1) * TILE_HEIGHT, screenBuffer, picture);
 }
 
 int main(int argc, char** argv) {
@@ -239,6 +226,7 @@ int main(int argc, char** argv) {
 	Image man("resources\\man.png");
 	Image thorn("resources\\thorn.png");
 	Image exit("resources\\exit.png");
+	Image finalExit("resources\\finalExit.jpg");
 	Image gameOver("resources\\gameOver.jpg");
 	Image gameWin("resources\\win.jpg");
 
@@ -251,22 +239,24 @@ int main(int argc, char** argv) {
 	openFiles("resources\\room4.txt", chars4);
 	openFiles("resources\\common_plan.txt", arrOfTypes);
 
-	startX = 150;
-	startY = 150;
-
 	int indexOfTypes{};
+	std::string charsCur;
 	switch (arrOfTypes[indexOfTypes++]) {
 		case 'A':
-			readArray(chars1, screenBuffer, floor, wall, man, thorn, exit);
+			charsCur = chars1;
+			drawRoom(charsCur, screenBuffer, floor, wall, man, thorn, exit, finalExit);
 			break;
 		case 'B':
-			readArray(chars2, screenBuffer, floor, wall, man, thorn, exit);
+			charsCur = chars2;
+			drawRoom(charsCur, screenBuffer, floor, wall, man, thorn, exit, finalExit);
 			break;
 		case 'C':
-			readArray(chars3, screenBuffer, floor, wall, man, thorn, exit);
+			charsCur = chars3;
+			drawRoom(charsCur, screenBuffer, floor, wall, man, thorn, exit, finalExit);
 			break;
 		case 'D':
-			readArray(chars4, screenBuffer, floor, wall, man, thorn, exit);
+			charsCur = chars4;
+			drawRoom(charsCur, screenBuffer, floor, wall, man, thorn, exit, finalExit);
 			break;
 		}
 
@@ -283,8 +273,6 @@ int main(int argc, char** argv) {
 		lastFrame = currentFrame;
 		glfwPollEvents();
 
-
-		std::string charsCur = chars1;
 		processPlayerMovement(player, charsCur);
 		restoreBackGround(screenBuffer, floor, player);
 		player.DrawOfPlayer(screenBuffer, floor, man);
@@ -296,7 +284,7 @@ int main(int argc, char** argv) {
 			if (flag_fall) {
 			curX = 0;
 			curY = 0;
-			draw(curX, curY, screenBuffer, gameOver);
+			drawTile(curX, curY, screenBuffer, gameOver);
 		}
 
 		//else 
@@ -305,31 +293,44 @@ int main(int argc, char** argv) {
 			flag_fall = false;
 			flag_exit = false;
 			flag_final_exit = false;
+			curX = 0;
+			curY = 0;
 			switch (arrOfTypes[indexOfTypes++]) {
 				case 'A':
+					std::cout << "A" << std::endl;
 					charsCur = chars1;
-					readArray(charsCur, screenBuffer, floor, wall, man, thorn, exit);
+					drawRoom(charsCur, screenBuffer, floor, wall, man, thorn, exit, finalExit);
 					break;
 				case 'B':
+					std::cout << "B" << std::endl;
 					charsCur = chars2;
-					readArray(charsCur, screenBuffer, floor, wall, man, thorn, exit);
+					drawRoom(chars2, screenBuffer, floor, wall, man, thorn, exit, finalExit);
+					for (int i = 0; i < chars2.size(); i++)
+						std::cout << chars2[i];
 					break;
 				case 'C':
 					charsCur = chars3;
-					readArray(charsCur, screenBuffer, floor, wall, man, thorn, exit);
+					drawRoom(charsCur, screenBuffer, floor, wall, man, thorn, exit, finalExit);
 					break;
 				case 'D':
 					charsCur = chars4;
-					readArray(charsCur, screenBuffer, floor, wall, man, thorn, exit);
+					drawRoom(charsCur, screenBuffer, floor, wall, man, thorn, exit, finalExit);
 					break;
 			}
+			//starting_pos{ .x = startX, .y = startY };
+			//startX = player.GetCoords().x;
+			startX = 0;
+			startY = player.GetCoords().y;
+			std::cout << "pos  = " << startX << " " << startY << std::endl;
+			//player.PutStartCoords(startX, startY);// { starting_pos };
+			player.PutCoords(0, startY);
 		}
 		
 		//else
 			if (flag_final_exit) {
 			curX = 0;
 			curY = 0;
-			draw(curX, curY, screenBuffer, gameWin);
+			drawTile(curX, curY, screenBuffer, gameWin);
 		}
 
 

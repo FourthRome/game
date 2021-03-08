@@ -2,13 +2,6 @@
 #include "Player.h"
 #include <iostream>
 
-//bool Player::Moved() const
-//{
-//  if(coords.x == old_coords.x && coords.y == old_coords.y)
-//    return false;
-//  else
-//    return true;
-//}
 int obstX, obstY, futureX, futureY;
 
 char Player::Elem(std::string& chars, int obstX, int obstY) {
@@ -47,7 +40,6 @@ void Player::ProcessInput(MovementDir dir, std::string& chars, bool& flag_stop, 
 {
     int move_dist = 1;
 
-    //bool flag_stop{};
     flag_stop = false;
     //flag_final_exit = false;
     switch (dir) {
@@ -156,8 +148,8 @@ void Player::ProcessInput(MovementDir dir, std::string& chars, bool& flag_stop, 
 
 void Player::DrawOfPlayer(Image& screen, Image& floor, Image& man) {
 
-    for (int y = coords.y; y <= coords.y + man.Height(); ++y) {
-        for (int x = coords.x; x <= coords.x + man.Width(); ++x) {
+    for (int y = coords.y; y < coords.y + man.Height(); ++y) { // or <=
+        for (int x = coords.x; x < coords.x + man.Width(); ++x) { // or <=
             screen.PutPixel(x, y, man.GetPixel(x - coords.x, (y - coords.y)));
             //screen.PutPixel(x, y, color);
         }
