@@ -25,11 +25,11 @@ bool Player::CheckCoords(std::string& chars, int obstX, int obstY, int futureX, 
     else return false;
 }
 
-void Player::UpdateFlags(bool& local_flag_break, bool& flag_fall, bool& flag_exit, bool& flag_final_exit,
+void Player::UpdateFlags(bool& flag_stop, bool& flag_fall, bool& flag_exit, bool& flag_final_exit,
     std::string& chars, int obstX, int obstY) {
 
     if (Elem(chars, obstX, obstY) == '#') {
-        local_flag_break = true;
+        flag_stop = true;
     }
     else if (Elem(chars, obstX, obstY) == 'T' || Elem(chars, obstX, obstY) == ' ') {
         flag_fall = true;
@@ -43,28 +43,33 @@ void Player::UpdateFlags(bool& local_flag_break, bool& flag_fall, bool& flag_exi
 
 }
 
-void Player::ProcessInput(MovementDir dir, std::string& chars, bool& flag_fall, bool& flag_exit, bool& flag_final_exit)
+void Player::ProcessInput(MovementDir dir, std::string& chars, bool& flag_stop, bool& flag_fall, bool& flag_exit, bool& flag_final_exit)
 {
     int move_dist = 1;
 
-    bool local_flag_break{};
+    //bool flag_stop{};
+    flag_stop = false;
+    //flag_final_exit = false;
     switch (dir) {
     case MovementDir::UP:
         futureX = coords.x;
         futureY = coords.y + move_dist;
         obstX = coords.x / TILE_WIDTH;
-        obstY = coords.y / TILE_HEIGHT + 2; // important
+        obstY = coords.y / TILE_HEIGHT + 2; // check for window_size
         if (CheckCoords(chars, obstX, obstY, futureX, futureY + TILE_HEIGHT)) {
             if (coords.x % 32 == 0) {
-                UpdateFlags(local_flag_break, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY);
+                UpdateFlags(flag_stop, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY);
             }
             else {
-                UpdateFlags(local_flag_break, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY);
-                UpdateFlags(local_flag_break, flag_fall, flag_exit, flag_final_exit, chars, obstX + 1, obstY);
+                UpdateFlags(flag_stop, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY);
+                UpdateFlags(flag_stop, flag_fall, flag_exit, flag_final_exit, chars, obstX + 1, obstY);
 
             }
+            if (flag_stop) { flag_fall = false; flag_exit = false; flag_final_exit = false;  }
+            if (flag_fall) { flag_exit = false; flag_final_exit = false; }
+            if (flag_exit) { flag_final_exit = false; }
         }
-        if (!local_flag_break) {
+        if (!flag_stop) {
             old_coords.y = coords.y;
             coords.y += move_dist;
         }
@@ -75,18 +80,21 @@ void Player::ProcessInput(MovementDir dir, std::string& chars, bool& flag_fall, 
         futureX = coords.x;
         futureY = coords.y - move_dist;
         obstX = coords.x / TILE_WIDTH;
-        obstY = coords.y / TILE_HEIGHT - 1; // checj for window_size
+        obstY = coords.y / TILE_HEIGHT - 1; // check for window_size
         if (CheckCoords(chars, obstX, obstY, futureX, futureY)) {
             if (coords.x % 32 == 0) {
-                UpdateFlags(local_flag_break, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY);
+                UpdateFlags(flag_stop, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY);
             }
             else {
-                UpdateFlags(local_flag_break, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY);
-                UpdateFlags(local_flag_break, flag_fall, flag_exit, flag_final_exit, chars, obstX + 1, obstY);
+                UpdateFlags(flag_stop, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY);
+                UpdateFlags(flag_stop, flag_fall, flag_exit, flag_final_exit, chars, obstX + 1, obstY);
 
             }
+            if (flag_stop) { flag_fall = false; flag_exit = false; flag_final_exit = false; }
+            if (flag_fall) { flag_exit = false; flag_final_exit = false; }
+            if (flag_exit) { flag_final_exit = false; }
         }
-        if (!local_flag_break) {
+        if (!flag_stop) {
             old_coords.y = coords.y;
             coords.y -= move_dist;
         }
@@ -96,19 +104,22 @@ void Player::ProcessInput(MovementDir dir, std::string& chars, bool& flag_fall, 
     case MovementDir::LEFT:
         futureX = coords.x - move_dist;
         futureY = coords.y;
-        obstX = coords.x / TILE_WIDTH - 1; // important
+        obstX = coords.x / TILE_WIDTH - 1; // check for window_size
         obstY = coords.y / TILE_HEIGHT;
         if (CheckCoords(chars, obstX, obstY, futureX, futureY)) {
             if (coords.y % 32 == 0) {
-                UpdateFlags(local_flag_break, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY);
+                UpdateFlags(flag_stop, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY);
             }
             else {
-                UpdateFlags(local_flag_break, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY);
-                UpdateFlags(local_flag_break, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY + 1);
+                UpdateFlags(flag_stop, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY);
+                UpdateFlags(flag_stop, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY + 1);
 
             }
+            if (flag_stop) { flag_fall = false; flag_exit = false; flag_final_exit = false; }
+            if (flag_fall) { flag_exit = false; flag_final_exit = false; }
+            if (flag_exit) { flag_final_exit = false; }
         }
-        if (!local_flag_break) {
+        if (!flag_stop) {
             old_coords.x = coords.x;
             coords.x -= move_dist;
         }
@@ -118,19 +129,22 @@ void Player::ProcessInput(MovementDir dir, std::string& chars, bool& flag_fall, 
     case MovementDir::RIGHT:
         futureX = coords.x + move_dist;
         futureY = coords.y;
-        obstX = coords.x / TILE_WIDTH + 2; // important
+        obstX = coords.x / TILE_WIDTH + 2; // check for window_size
         obstY = coords.y / TILE_HEIGHT;
         if (CheckCoords(chars, obstX, obstY, futureX + TILE_WIDTH, futureY)) {
             if (coords.y % 32 == 0) {
-                UpdateFlags(local_flag_break, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY);
+                UpdateFlags(flag_stop, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY);
             }
             else {
-                UpdateFlags(local_flag_break, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY);
-                UpdateFlags(local_flag_break, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY + 1);
+                UpdateFlags(flag_stop, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY);
+                UpdateFlags(flag_stop, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY + 1);
 
             }
+            if (flag_stop) { flag_fall = false; flag_exit = false; flag_final_exit = false; }
+            if (flag_fall) { flag_exit = false; flag_final_exit = false; }
+            if (flag_exit) { flag_final_exit = false; }
         }
-        if (!local_flag_break) {
+        if (!flag_stop) {
             old_coords.x = coords.x;
             coords.x += move_dist;
         }
