@@ -2,17 +2,15 @@
 #include "Player.h"
 #include <iostream>
 
-int obstX, obstY, futureX, futureY;
-
 char Player::Elem(std::string& chars, int obstX, int obstY) {
     try { return chars[(CNT_HEIGHT - 1 - obstY) * (CNT_WIDTH + 1) + obstX]; }
     catch (...) { std::cout << "wrong indexes obstX = " << obstX << " obstY = " << obstY << std::endl; }
 }
 
 bool Player::CheckCoords(std::string& chars, int obstX, int obstY, int futureX, int futureY) {
-    if (futureX <= obstX * TILE_WIDTH + TILE_WIDTH &&
+    if (futureX < obstX * TILE_WIDTH + TILE_WIDTH &&
         futureX >= obstX * TILE_WIDTH &&
-        futureY <= obstY * TILE_HEIGHT + TILE_HEIGHT &&
+        futureY < obstY * TILE_HEIGHT + TILE_HEIGHT &&
         futureY >= obstY * TILE_HEIGHT)
         return true;
     else return false;
@@ -39,7 +37,7 @@ void Player::UpdateFlags(bool& flag_stop, bool& flag_fall, bool& flag_exit, bool
 void Player::ProcessInput(MovementDir dir, std::string& chars, bool& flag_stop, bool& flag_fall, bool& flag_exit, bool& flag_final_exit)
 {
     int move_dist = 1;
-
+    int obstX, obstY, futureX, futureY;
     flag_stop = false;
     //flag_final_exit = false;
     switch (dir) {
@@ -51,10 +49,13 @@ void Player::ProcessInput(MovementDir dir, std::string& chars, bool& flag_stop, 
         if (CheckCoords(chars, obstX, obstY, futureX, futureY + TILE_HEIGHT)) {
             if (coords.x % 32 == 0) {
                 UpdateFlags(flag_stop, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY);
+                std::cout << chars[(CNT_HEIGHT - 1 - obstY) * (CNT_WIDTH + 1) + obstX] << std::endl;
             }
             else {
                 UpdateFlags(flag_stop, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY);
+                std::cout << chars[(CNT_HEIGHT - 1 - obstY) * (CNT_WIDTH + 1) + obstX];
                 UpdateFlags(flag_stop, flag_fall, flag_exit, flag_final_exit, chars, obstX + 1, obstY);
+                std::cout << chars[(CNT_HEIGHT - 1 - obstY) * (CNT_WIDTH + 1) + obstX] << std::endl;
 
             }
             if (flag_stop) { flag_fall = false; flag_exit = false; flag_final_exit = false;  }
@@ -125,11 +126,14 @@ void Player::ProcessInput(MovementDir dir, std::string& chars, bool& flag_stop, 
         obstY = coords.y / TILE_HEIGHT;
         if (CheckCoords(chars, obstX, obstY, futureX + TILE_WIDTH, futureY)) {
             if (coords.y % 32 == 0) {
+                std::cout << chars[(CNT_HEIGHT - 1 - obstY) * (CNT_WIDTH + 1) + obstX] << std::endl;
                 UpdateFlags(flag_stop, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY);
             }
             else {
                 UpdateFlags(flag_stop, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY);
+                std::cout << chars[(CNT_HEIGHT - 1 - obstY) * (CNT_WIDTH + 1) + obstX] << std::endl;
                 UpdateFlags(flag_stop, flag_fall, flag_exit, flag_final_exit, chars, obstX, obstY + 1);
+                std::cout << chars[(CNT_HEIGHT - 1 - obstY - 1) * (CNT_WIDTH + 1) + obstX] << std::endl;
 
             }
             if (flag_stop) { flag_fall = false; flag_exit = false; flag_final_exit = false; }
@@ -154,4 +158,5 @@ void Player::DrawOfPlayer(Image& screen, Image& floor, Image& man) {
             //screen.PutPixel(x, y, color);
         }
     }
+    //std::cout << "coords.x = " << coords.x << "coords.y = " << coords.y << std::endl;
 }

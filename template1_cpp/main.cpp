@@ -156,7 +156,7 @@ void drawRoom(std::string chars, Image& screenBuffer, Image& floor, Image& wall,
 				drawTile(curX, curY, screenBuffer, wall);
 				break;
 			case '@':
-				chars[i] = '.';
+				//chars[i] = '.';
 				startX = curX;
 				startY = curY;
 				break;
@@ -181,6 +181,7 @@ void drawRoom(std::string chars, Image& screenBuffer, Image& floor, Image& wall,
 			curX += wall.Width();
 			
 		}
+		std::cout << chars[i];
 	}
 }
 

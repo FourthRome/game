@@ -40,7 +40,7 @@ private:
     //Point start_coords{ .x = 150, .y = 150 };
     Point coords{ .x = 150, .y = 150 };
     Point old_coords{ .x = 150, .y = 150 };
-    Pixel color{ .r = 255, .g = 0, .b = 0, .a = 1 }; //here, color of game_square
+    //Pixel color{ .r = 255, .g = 0, .b = 0, .a = 1 }; //here, color of game_square
     int move_speed = 1; // here, speed of game_square
 };
 
