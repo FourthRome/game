@@ -9,10 +9,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 set(SOURCE_FILES
         glad.c
-        Image.cpp
-        Player.cpp
         Tile.cpp
         Level.cpp
+        Image.cpp
+        Player.cpp
         main.cpp)
 
 set(ADDITIONAL_INCLUDE_DIRS

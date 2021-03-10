@@ -1,3 +1,4 @@
+#pragma once
 #ifndef MAIN_IMAGE_H
 #define MAIN_IMAGE_H
 

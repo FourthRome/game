@@ -1,4 +1,4 @@
-#include<Level.h>
+#include"Level.h"
 
 Level::Level(const std::string& path) { // TO DO optimize read file
     std::ifstream room_file(path);
@@ -10,7 +10,6 @@ Level::Level(const std::string& path) { // TO DO optimize read file
             if (c != '\n')
                 tiles.push_back(Tile(c));
         }
-        std::cout << chars.size() << std::endl;
     }
     else { std::cout << "ERROR::COULDN'T OPEN FILE:" << path << std::endl; }
 

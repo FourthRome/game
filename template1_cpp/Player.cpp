@@ -152,68 +152,68 @@ void Player::ProcessInput(MovementDir dir, std::string& chars, bool& flag_stop, 
 }
 
 
-void Player::MyProcessInput(MovementDir dir, std::string& chars, bool& flag_stop, bool& flag_fall, bool& flag_exit, bool& flag_final_exit)
-{
-    int move_dist = 1;
-    //int obstX, obstY, futureX, futureY;
-    flag_stop = false;
-    //flag_final_exit = false;
-
-    
-    switch (dir) {
-    case MovementDir::UP:
-        switch (level.GetTile(coords.x, coords.y + move_dist + TILE_HEIGHT).GetType()) {
-        case TileType::FLOOR: old_coords.y = coords.y; coords.y += move_dist; break;
-        case TileType::WALL: flag_stop = true; break;
-        case TileType::THORN: flag_fall = true; break;
-        case TileType::EXIT: old_coords.y = coords.y; coords.y += move_dist; flag_exit; break;
-        case TileType::FINAL_EXIT: flag_final_exit = true; break;
-
-        }
-        break;
-
-
-    case MovementDir::DOWN:
-        switch (level.GetTile(coords.x, coords.y + move_dist).GetType()) {
-        case TileType::FLOOR: old_coords.y = coords.y; coords.y -= move_dist; break;
-        case TileType::WALL: flag_stop = true; break;
-        case TileType::THORN: flag_fall = true; break;
-        case TileType::EXIT: old_coords.y = coords.y; coords.y -= move_dist; flag_exit; break;
-        case TileType::FINAL_EXIT: flag_final_exit = true; break;
-
-        }
-        
-        break;
-
-
-    case MovementDir::LEFT:
-        switch (level.GetTile(coords.x, coords.y + move_dist).GetType()) {
-        case TileType::FLOOR: old_coords.x = coords.x; coords.x -= move_dist; break;
-        case TileType::WALL: flag_stop = true; break;
-        case TileType::THORN: flag_fall = true; break;
-        case TileType::EXIT: old_coords.x = coords.x; coords.x -= move_dist; flag_exit; break;
-        case TileType::FINAL_EXIT: flag_final_exit = true; break;
-
-        }
-       
-        break;
-
-
-    case MovementDir::RIGHT:
-        
-        switch (level.GetTile(coords.x, coords.y + move_dist).GetType()) {
-        case TileType::FLOOR: old_coords.x = coords.x; coords.x += move_dist; break;
-        case TileType::WALL: flag_stop = true; break;
-        case TileType::THORN: flag_fall = true; break;
-        case TileType::EXIT: old_coords.x = coords.x; coords.x += move_dist; flag_exit; break;
-        case TileType::FINAL_EXIT: flag_final_exit = true; break;
-
-        }
-        
-        break;
-    default:break;
-    }
-}
+//void Player::MyProcessInput(MovementDir dir, std::string& chars, bool& flag_stop, bool& flag_fall, bool& flag_exit, bool& flag_final_exit)
+//{
+//    int move_dist = 1;
+//    //int obstX, obstY, futureX, futureY;
+//    flag_stop = false;
+//    //flag_final_exit = false;
+//
+//    
+//    switch (dir) {
+//    case MovementDir::UP:
+//        switch (level.GetTile(coords.x, coords.y + move_dist + TILE_HEIGHT).GetType()) {
+//        case TileType::FLOOR: old_coords.y = coords.y; coords.y += move_dist; break;
+//        case TileType::WALL: flag_stop = true; break;
+//        case TileType::THORN: flag_fall = true; break;
+//        case TileType::EXIT: old_coords.y = coords.y; coords.y += move_dist; flag_exit; break;
+//        case TileType::FINAL_EXIT: flag_final_exit = true; break;
+//
+//        }
+//        break;
+//
+//
+//    case MovementDir::DOWN:
+//        switch (level.GetTile(coords.x, coords.y + move_dist).GetType()) {
+//        case TileType::FLOOR: old_coords.y = coords.y; coords.y -= move_dist; break;
+//        case TileType::WALL: flag_stop = true; break;
+//        case TileType::THORN: flag_fall = true; break;
+//        case TileType::EXIT: old_coords.y = coords.y; coords.y -= move_dist; flag_exit; break;
+//        case TileType::FINAL_EXIT: flag_final_exit = true; break;
+//
+//        }
+//        
+//        break;
+//
+//
+//    case MovementDir::LEFT:
+//        switch (level.GetTile(coords.x, coords.y + move_dist).GetType()) {
+//        case TileType::FLOOR: old_coords.x = coords.x; coords.x -= move_dist; break;
+//        case TileType::WALL: flag_stop = true; break;
+//        case TileType::THORN: flag_fall = true; break;
+//        case TileType::EXIT: old_coords.x = coords.x; coords.x -= move_dist; flag_exit; break;
+//        case TileType::FINAL_EXIT: flag_final_exit = true; break;
+//
+//        }
+//       
+//        break;
+//
+//
+//    case MovementDir::RIGHT:
+//        
+//        switch (level.GetTile(coords.x, coords.y + move_dist).GetType()) {
+//        case TileType::FLOOR: old_coords.x = coords.x; coords.x += move_dist; break;
+//        case TileType::WALL: flag_stop = true; break;
+//        case TileType::THORN: flag_fall = true; break;
+//        case TileType::EXIT: old_coords.x = coords.x; coords.x += move_dist; flag_exit; break;
+//        case TileType::FINAL_EXIT: flag_final_exit = true; break;
+//
+//        }
+//        
+//        break;
+//    default:break;
+//    }
+//}
 
 
 

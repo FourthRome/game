@@ -7,6 +7,7 @@
 
 #include <GLFW/glfw3.h>
 #include <SFML/Graphics.hpp>
+#include <map>
 #include <iostream>
 
 GLfloat deltaTime = 0.0f;
@@ -18,6 +19,10 @@ int curX = 0;
 int curY = WINDOW_HEIGHT - TILE_HEIGHT;
 double EPSILON = 0.00001;
 
+map<TileType, Image*> images; // clear
+void addImage(TileType type, const std::string& path) {
+	images[type] = Image(path); 
+}
 
 struct InputState
 {
@@ -193,8 +198,8 @@ void drawLevel(Level& level, Image& screenBuffer) {
 		for (int curY = 0; curY < WINDOW_HEIGHT; curY += TILE_HEIGHT) {
 			
 			TileType curType = level.GetTile(curX, curY).GetType();
-			Image curImage = map[curType];
-			draTile(curX, curY, screenBuffer, curImage);
+			//Image curImage = map[curType];
+			drawTile(curX, curY, screenBuffer, images[curType]);
 		}
 	}
 		
@@ -262,21 +267,21 @@ int main(int argc, char** argv) {
 	Image gameOver("resources\\gameOver.jpg");
 	Image gameWin("resources\\win.jpg");
 	*/
-	Tile::images.clear(); // Tile::imeges{};
-	Tile::addImage(FLOOR, "resources\\floor.png");
-	Tile::addImage(WALL, "resources\\wall.png");
-	Tile::addImage(MAN, "resources\\man.png");
-	Tile::addImage(THORN, "resources\\thorn.png");
-	Tile::addImage(EXIT, "resources\\exit.png");
-	Tile::addImage(FINAL_EXIT, "resources\\finalExit.jpg");
+	images.clear(); // Tile::imeges{};
+	addImage(TileType::FLOOR, "resources\\floor.png");
+	//Tile::addImage(Tile::WALL, "resources\\wall.png");
+	//Tile::addImage(Tile::MAN, "resources\\man.png");
+	//Tile::addImage(Tile::THORN, "resources\\thorn.png");
+	//Tile::addImage(Tile::EXIT, "resources\\exit.png");
+	//Tile::addImage(Tile::FINAL_EXIT, "resources\\finalExit.jpg");
 
 
 	// std::string chars1 = "", chars2 = "", chars3 = "", chars4 = "";
 	std::string arrOfTypes = "";
 	Level level1("resources\\room1.txt");
-	Level level2("resources\\room2.txt");
-	Level level3("resources\\room3.txt");
-	Level level4("resources\\room4.txt");
+	//Level level2("resources\\room2.txt");
+	//Level level3("resources\\room3.txt");
+	//Level level4("resources\\room4.txt");
 	openFiles("resources\\common_plan.txt", arrOfTypes);
 
 	int indexOfTypes{};
@@ -317,8 +322,8 @@ int main(int argc, char** argv) {
 		glfwPollEvents();
 
 		processPlayerMovement(player, charsCur);
-		restoreBackGround(screenBuffer, images[FLOOR], player);
-		player.DrawOfPlayer(screenBuffer, images[MAN]);
+		restoreBackGround(screenBuffer, *(images[TileType::FLOOR]), player);
+		player.DrawOfPlayer(screenBuffer, *(images[TileType::MAN]));
 		
 		if (flag_stop) {
 

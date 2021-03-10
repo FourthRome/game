@@ -1,24 +1,25 @@
-#include<Tile.h>
+#include"Tile.h"
 
 Tile::Tile(char type_o) {
     switch (type_o) {
     case '.':
-        type = FLOOR;
+        type = TileType::FLOOR;
         break;
     case '#':
-        type = WALL;
+        type = TileType::WALL;
         break;
     case '@':
-        type = MAN;
+        type = TileType::MAN;
         break;
     case 'T':
-        type = THORN;
+        type = TileType::THORN;
         break;
     case 'x':
-        type = EXIT;
+        type = TileType::EXIT;
         break;
     case 'Q':
-        type = FINAL_EXIT;
+        type = TileType::FINAL_EXIT;
         break;
     default: break;
     }
+}
