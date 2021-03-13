@@ -1,4 +1,4 @@
-#include"Tile.h"
+#include "Tile.h"
 
 Tile::Tile(char type_o) {
     switch (type_o) {

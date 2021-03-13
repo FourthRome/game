@@ -195,9 +195,9 @@ void drawLevel(Level& level, Image& screenBuffer) {
 	for (int curX = 0; curX < WINDOW_WIDTH; curX += TILE_WIDTH) {
 		for (int curY = 0; curY < WINDOW_HEIGHT; curY += TILE_HEIGHT) {
 			
-			TileType curType = level.GetTile(curX, curY).GetType();
+			auto curType = level.GetTile(curX, curY).GetType();
 			//Image curImage = map[curType];
-			drawTile(curX, curY, screenBuffer, images[curType]);
+			drawTile(curX, curY, screenBuffer, *(Tile::images[curType]));
 		}
 	}
 		
@@ -262,16 +262,14 @@ int main(int argc, char** argv) {
 	Image thorn("resources\\thorn.png");
 	Image exit("resources\\exit.png");
 	Image finalExit("resources\\finalExit.jpg");
-	Image gameOver("resources\\gameOver.jpg");
-	Image gameWin("resources\\win.jpg");
 	*/
-	//std::map<std::string, Image*> Tile::images = nullptr;// = nullptr; // Tile::imeges{};
-	Tile::addImage(Tile::images, TileType::FLOOR, "..resources/floor.png");
-	//Tile::addImage(Tile::WALL, "resources\\wall.png");
-	//Tile::addImage(Tile::MAN, "resources\\man.png");
-	//Tile::addImage(Tile::THORN, "resources\\thorn.png");
-	//Tile::addImage(Tile::EXIT, "resources\\exit.png");
-	//Tile::addImage(Tile::FINAL_EXIT, "resources\\finalExit.jpg");
+
+	Tile::addImage(TileType::FLOOR, "..resources/floor.png");
+	Tile::addImage(TileType::WALL, "..resources/wall.png");
+	Tile::addImage(TileType::MAN, "..resources/man.png");
+	Tile::addImage(TileType::THORN, "..resources/thorn.png");
+	Tile::addImage(TileType::EXIT, "..resources/exit.png");
+	Tile::addImage(TileType::FINAL_EXIT, "..resources/finalExit.jpg");
 
 
 	// std::string chars1 = "", chars2 = "", chars3 = "", chars4 = "";
@@ -281,7 +279,7 @@ int main(int argc, char** argv) {
 	//Level level3("resources\\room3.txt");
 	//Level level4("resources\\room4.txt");
 	openFiles("resources\\common_plan.txt", arrOfTypes);
-
+	
 	int indexOfTypes{};
 	std::string charsCur;
 	switch (arrOfTypes[indexOfTypes++]) {
@@ -320,10 +318,8 @@ int main(int argc, char** argv) {
 		glfwPollEvents();
 
 		processPlayerMovement(player, charsCur);
-		TileType tileType1(FLOOR);
-		restoreBackGround(screenBuffer, Tile::images[tileType1], player);
-		TileType tileType2(MAN);
-		player.DrawOfPlayer(screenBuffer, Tile::images[tileType2]);
+		restoreBackGround(screenBuffer, *(Tile::images[TileType::FLOOR]), player);
+		player.DrawOfPlayer(screenBuffer, *(Tile::images[TileType::MAN]));
 		 
 
 		if (flag_fall) {
