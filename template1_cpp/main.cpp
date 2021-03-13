@@ -196,6 +196,11 @@ void drawLevel(Level& level, Image& screenBuffer) {
 		for (int curY = 0; curY < WINDOW_HEIGHT; curY += TILE_HEIGHT) {
 			
 			auto curType = level.GetTile(curX, curY).GetType();
+            if (curType == TileType::MAN)
+            {
+                startX = curX;
+                startY = curY;
+            }
 			//Image curImage = map[curType];
 			drawTile(curX, curY, screenBuffer, *(Tile::images[curType]));
 		}
@@ -264,12 +269,12 @@ int main(int argc, char** argv) {
 	Image finalExit("resources\\finalExit.jpg");
 	*/
 
-	Tile::addImage(TileType::FLOOR, "..resources/floor.png");
-	Tile::addImage(TileType::WALL, "..resources/wall.png");
-	Tile::addImage(TileType::MAN, "..resources/man.png");
-	Tile::addImage(TileType::THORN, "..resources/thorn.png");
-	Tile::addImage(TileType::EXIT, "..resources/exit.png");
-	Tile::addImage(TileType::FINAL_EXIT, "..resources/finalExit.jpg");
+	Tile::addImage(TileType::FLOOR, "resources\\floor.png");
+	Tile::addImage(TileType::WALL, "resources\\wall.png");
+	Tile::addImage(TileType::MAN, "resources\\man.png");
+	Tile::addImage(TileType::THORN, "resources\\thorn.png");
+	Tile::addImage(TileType::EXIT, "resources\\exit.png");
+	Tile::addImage(TileType::FINAL_EXIT, "resources\\finalExit.jpg");
 
 
 	// std::string chars1 = "", chars2 = "", chars3 = "", chars4 = "";

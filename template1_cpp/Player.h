@@ -28,7 +28,7 @@ struct Player
     void DrawOfPlayer(Image& screen, Image& man);
     char Elem(std::string& str, int a_obst, int b_obst);
     bool CheckCoords(std::string& chars, int obstX, int obstY, int futureX, int futureY);
-    void Player::UpdateFlags(bool& local_flag_break, bool& flag_fall, bool& flag_exit, bool& flag_FinalExit,
+    void UpdateFlags(bool& local_flag_break, bool& flag_fall, bool& flag_exit, bool& flag_FinalExit,
         std::string& chars, int obstX, int obstY);
     
     
