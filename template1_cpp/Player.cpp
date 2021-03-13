@@ -219,11 +219,11 @@ void Player::MyProcessInput(MovementDir dir, Level& level, bool& flag_stop, bool
 
 
 
-void Player::DrawOfPlayer(Image& screen, Image& man) {
+void Player::DrawOfPlayer(Image& screen) {
 
-    for (int y = coords.y; y < coords.y + man.Height(); ++y) { // or <=
-        for (int x = coords.x; x < coords.x + man.Width(); ++x) { // or <=
-            screen.PutPixel(x, y, man.GetPixel(x - coords.x, (y - coords.y)));
+    for (int y = coords.y; y < coords.y + TILE_HEIGHT; ++y) { // or <=
+        for (int x = coords.x; x < coords.x + TILE_WIDTH; ++x) { // or <=
+            screen.PutPixel(x, y, (Tile::GetImage(TileType::MAN)->GetPixel(x - coords.x, y - coords.y)));
         }
     }
 }

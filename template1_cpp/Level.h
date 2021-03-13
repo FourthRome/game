@@ -12,7 +12,7 @@
 struct Level{
 public:
     Level(const std::string& path);
-    Tile GetTile(int coordsX, int coordsY) { return tiles[coordsX / TILE_WIDTH + (WINDOW_HEIGHT - coordsY - 1) / TILE_HEIGHT * CNT_WIDTH]; }
+    Tile GetTile(int coordsX, int coordsY) { return tiles[(int) (coordsX / TILE_WIDTH) + ((int) ((WINDOW_HEIGHT - coordsY - 1) / TILE_HEIGHT)) * CNT_WIDTH]; }
     //Tile GetTileCoords(int coordX, int coordsY)
     //void PutTile(int coordX, int coordsY, Tile& cur) { tiles[coordsX / TILE_WIDTH + (coords.Y / TILE_HEIGHT * CNT_WIDTH)] = cur; }
 

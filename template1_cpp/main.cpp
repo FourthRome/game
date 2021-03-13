@@ -123,11 +123,19 @@ int initGL()
 	return 0;
 }
 
-void drawTile(const int curX, const int curY, Image& screenBuffer, Image& picture) {
-	for (int i = 0; i < picture.Width(); ++i)
-		for (int j = 0; j < picture.Height(); ++j)
-			screenBuffer.PutPixel(curX + i, curY + j, picture.GetPixel(i, j));
+void drawTile(const int curX, const int curY, Image& screenBuffer, const Tile& tile) {
+    const Image* picture = tile.GetImage();
+	for (int i = 0; i < picture->Width(); ++i)
+		for (int j = 0; j < picture->Height(); ++j)
+			screenBuffer.PutPixel(curX + i, curY + j, picture->GetPixel(i, j));
 
+}
+
+void drawImage(const int curX, const int curY, Image& screenBuffer, const Image& image)
+{
+    for (int i = 0; i < image.Width(); ++i)
+		for (int j = 0; j < image.Height(); ++j)
+			screenBuffer.PutPixel(curX + i, curY + j, image.GetPixel(i, j));
 }
 
 void openFiles(const std::string& path, std::string& chars) {
@@ -142,94 +150,117 @@ void openFiles(const std::string& path, std::string& chars) {
 	else { std::cout << "ERROR::COULDN'T OPEN FILE: " << path << std::endl; }
 }
 
-void drawRoom(std::string chars, Image& screenBuffer, Image& floor, Image& wall, Image& man, Image& thorn, Image& exit, Image& finalExit) {
+// void drawRoom(std::string chars, Image& screenBuffer, Image& floor, Image& wall, Image& man, Image& thorn, Image& exit, Image& finalExit) {
 
-	curX = 0;
-	curY = WINDOW_HEIGHT - TILE_HEIGHT;
+// 	curX = 0;
+// 	curY = WINDOW_HEIGHT - TILE_HEIGHT;
 
-	startX = 0;
-	startY = posExitY;
+// 	startX = 0;
+// 	startY = posExitY;
 
-	for (int i = 0; i < chars.size(); i++) {
+// 	for (int i = 0; i < chars.size(); i++) {
 
-		switch (chars[i]) {
-			case ' ':
-				break;
-			case '.':
-				drawTile(curX, curY, screenBuffer, floor);
-				break;
-			case '#':
-				drawTile(curX, curY, screenBuffer, wall);
-				break;
-			case '@':
-				//chars[i] = '.';
-				startX = curX;
-				startY = curY;
-				break;
-			case 'T':
-				drawTile(curX, curY, screenBuffer, thorn);
-				break;
-			case 'x':
-				posExitX = 0;
-				posExitY = curY;
-				drawTile(curX, curY, screenBuffer, exit);
-				break;
-			case 'Q':
-				drawTile(curX, curY, screenBuffer, finalExit);
-				break;
-			default: break;
-		}
-		if (chars[i] == '\n') {
-			curX = 0;
-			curY -= wall.Height();
-		}
-		else {
-			curX += wall.Width();
+// 		switch (chars[i]) {
+// 			case ' ':
+// 				break;
+// 			case '.':
+// 				drawTile(curX, curY, screenBuffer, floor);
+// 				break;
+// 			case '#':
+// 				drawTile(curX, curY, screenBuffer, wall);
+// 				break;
+// 			case '@':
+// 				//chars[i] = '.';
+// 				startX = curX;
+// 				startY = curY;
+// 				break;
+// 			case 'T':
+// 				drawTile(curX, curY, screenBuffer, thorn);
+// 				break;
+// 			case 'x':
+// 				posExitX = 0;
+// 				posExitY = curY;
+// 				drawTile(curX, curY, screenBuffer, exit);
+// 				break;
+// 			case 'Q':
+// 				drawTile(curX, curY, screenBuffer, finalExit);
+// 				break;
+// 			default: break;
+// 		}
+// 		if (chars[i] == '\n') {
+// 			curX = 0;
+// 			curY -= wall.Height();
+// 		}
+// 		else {
+// 			curX += wall.Width();
 			
-		}
-		std::cout << chars[i];
-	}
-}
+// 		}
+// 		std::cout << chars[i];
+// 	}
+// }
 
 void drawLevel(Level& level, Image& screenBuffer) {
 	for (int curX = 0; curX < WINDOW_WIDTH; curX += TILE_WIDTH) {
 		for (int curY = 0; curY < WINDOW_HEIGHT; curY += TILE_HEIGHT) {
-			
-			auto curType = level.GetTile(curX, curY).GetType();
+			auto tile = level.GetTile(curX, curY);
+			auto curType = tile.GetType();
             if (curType == TileType::MAN)
             {
                 startX = curX;
                 startY = curY;
             }
 			//Image curImage = map[curType];
-			drawTile(curX, curY, screenBuffer, *(Tile::images[curType]));
+			drawTile(curX, curY, screenBuffer, tile);
 		}
 	}
 		
 }
 
-void restoreBackGround(Image& screenBuffer, Image& picture, Player& man) {
+void restoreBackGround(Image& screenBuffer, Level& level, Player& man) {
 
-	int numY = (int) trunc(man.GetOldCoords().y / TILE_HEIGHT); // here should trunc all brackets
-	int numX = (int) trunc(man.GetOldCoords().x / TILE_WIDTH); // here should trunc all brackets
-	if (man.GetOldCoords().y - trunc(man.GetOldCoords().y) < EPSILON && man.GetOldCoords().y % TILE_HEIGHT == 0 &&
-		man.GetOldCoords().x - trunc(man.GetOldCoords().x) < EPSILON && man.GetOldCoords().x % TILE_WIDTH == 0) {
-		drawTile(numX * TILE_WIDTH, numY * TILE_HEIGHT, screenBuffer, picture);
-	}
-	else if (man.GetOldCoords().y - trunc(man.GetOldCoords().y) < EPSILON && man.GetOldCoords().y % TILE_HEIGHT == 0) {
-		drawTile(numX * TILE_WIDTH, numY * TILE_HEIGHT, screenBuffer, picture);
-		drawTile((numX + 1) * TILE_WIDTH, numY * TILE_HEIGHT, screenBuffer, picture);
-	}
-	else if (man.GetOldCoords().x - trunc(man.GetOldCoords().x) < EPSILON && man.GetOldCoords().x % TILE_WIDTH == 0) {
-		drawTile(numX * TILE_WIDTH, numY * TILE_HEIGHT, screenBuffer, picture);
-		drawTile(numX * TILE_WIDTH, (numY + 1) * TILE_HEIGHT, screenBuffer, picture);
-	}
-	else {
-		drawTile(numX * TILE_WIDTH, numY * TILE_HEIGHT, screenBuffer, picture);
-		drawTile((numX + 1) * TILE_WIDTH, numY * TILE_HEIGHT, screenBuffer, picture);
-		drawTile(numX * TILE_WIDTH, (numY + 1) * TILE_HEIGHT, screenBuffer, picture);
-		drawTile((numX + 1) * TILE_WIDTH, (numY + 1) * TILE_HEIGHT, screenBuffer, picture);
-	}
+	// int numY = (int) trunc(man.GetOldCoords().y / TILE_HEIGHT); // here should trunc all brackets
+	// int numX = (int) trunc(man.GetOldCoords().x / TILE_WIDTH); // here should trunc all brackets
+
+    int numY = man.GetOldCoords().y - man.GetOldCoords().y % TILE_HEIGHT;
+	int numX = man.GetOldCoords().x - man.GetOldCoords().x % TILE_WIDTH;
+
+
+    drawTile(numX, numY, screenBuffer, level.GetTile(numX, numY));
+    if (numX + TILE_WIDTH < WINDOW_WIDTH)
+    {
+        drawTile(numX + TILE_WIDTH, numY, screenBuffer, level.GetTile(numX + TILE_WIDTH, numY));
+    }
+    if (numY + TILE_HEIGHT < WINDOW_HEIGHT)
+    {
+        drawTile(numX, numY + TILE_HEIGHT, screenBuffer, level.GetTile(numX, numY + TILE_HEIGHT));
+    }
+    if ((numX + TILE_WIDTH < WINDOW_WIDTH) && (numY + TILE_HEIGHT < WINDOW_HEIGHT))
+    {
+        drawTile(numX + TILE_WIDTH, numY + TILE_HEIGHT, screenBuffer,
+                level.GetTile(numX + TILE_WIDTH, numY + TILE_HEIGHT));
+    }
+
+    
+    
+
+	// if (man.GetOldCoords().y - trunc(man.GetOldCoords().y) < EPSILON && man.GetOldCoords().y % TILE_HEIGHT == 0 &&
+	// 	man.GetOldCoords().x - trunc(man.GetOldCoords().x) < EPSILON && man.GetOldCoords().x % TILE_WIDTH == 0) {
+	// 	drawTile(numX * TILE_WIDTH, numY * TILE_HEIGHT, screenBuffer, Level.GetTile());
+	// }
+	// else if (man.GetOldCoords().y - trunc(man.GetOldCoords().y) < EPSILON && man.GetOldCoords().y % TILE_HEIGHT == 0) {
+	// 	drawTile(numX * TILE_WIDTH, numY * TILE_HEIGHT, screenBuffer, picture);
+	// 	drawTile((numX + 1) * TILE_WIDTH, numY * TILE_HEIGHT, screenBuffer, picture);
+	// }
+	// else if (man.GetOldCoords().x - trunc(man.GetOldCoords().x) < EPSILON && man.GetOldCoords().x % TILE_WIDTH == 0) {
+	// 	drawTile(numX * TILE_WIDTH, numY * TILE_HEIGHT, screenBuffer, picture);
+	// 	drawTile(numX * TILE_WIDTH, (numY + 1) * TILE_HEIGHT, screenBuffer, picture);
+	// }
+	// else {
+	// 	drawTile(numX * TILE_WIDTH, numY * TILE_HEIGHT, screenBuffer, picture);
+	// 	drawTile((numX + 1) * TILE_WIDTH, numY * TILE_HEIGHT, screenBuffer, picture);
+	// 	drawTile(numX * TILE_WIDTH, (numY + 1) * TILE_HEIGHT, screenBuffer, picture);
+	// 	drawTile((numX + 1) * TILE_WIDTH, (numY + 1) * TILE_HEIGHT, screenBuffer, picture);
+	// }
 }
 
 int main(int argc, char** argv) {
@@ -259,8 +290,8 @@ int main(int argc, char** argv) {
 
 
 	Image screenBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, 4);// 4 - number of channels
-	Image gameOver("..resources/gameOver.jpg");
-	Image gameWin("..resources/win.jpg");
+	Image gameOver("resources\\gameOver.jpg");
+	Image gameWin("resources\\win.jpg");
     /*Image floor("resources\\floor.png");
 	Image wall("resources\\wall.png");
 	Image man("resources\\man.png");
@@ -324,14 +355,14 @@ int main(int argc, char** argv) {
 		glfwPollEvents();
 
 		processPlayerMovement(player, level1);
-		restoreBackGround(screenBuffer, *(Tile::images[TileType::FLOOR]), player);
-		player.DrawOfPlayer(screenBuffer, *(Tile::images[TileType::MAN]));
+		restoreBackGround(screenBuffer, level1, player);
+		player.DrawOfPlayer(screenBuffer);
 		 
 
 		if (flag_fall) {
 			curX = 0;
 			curY = 0;
-			drawTile(curX, curY, screenBuffer, gameOver);
+			drawImage(0, 0, screenBuffer, gameOver);
 		}
 
 		//if (flag_exit) {
@@ -375,7 +406,7 @@ int main(int argc, char** argv) {
 		if (flag_final_exit) {
 			curX = 0;
 			curY = 0;
-			drawTile(curX, curY, screenBuffer, gameWin);
+			drawImage(0, 0, screenBuffer, gameWin);
 		}
 
 
