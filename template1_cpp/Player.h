@@ -3,6 +3,7 @@
 #define MAIN_PLAYER_H
 
 #include "Image.h"
+#include "Level.h"
 
 struct Point
 {
@@ -23,13 +24,13 @@ struct Player
     explicit Player(Point pos = { .x = 10, .y = 10 }) :
         coords(pos), old_coords(coords) {};
 
-    void ProcessInput(MovementDir dir, std::string& chars, bool& flag_stop, bool& flag_fall, bool& flag_exit, bool& flag_final_exit);
-    void MyProcessInput(MovementDir dir, std::string& chars, bool& flag_stop, bool& flag_fall, bool& flag_exit, bool& flag_final_exit);
+    void ProcessInput(MovementDir dir, Level& level, bool& flag_stop, bool& flag_fall, bool& flag_exit, bool& flag_final_exit);
+    void MyProcessInput(MovementDir dir, Level& level, bool& flag_stop, bool& flag_fall, bool& flag_exit, bool& flag_final_exit);
     void DrawOfPlayer(Image& screen, Image& man);
-    char Elem(std::string& str, int a_obst, int b_obst);
-    bool CheckCoords(std::string& chars, int obstX, int obstY, int futureX, int futureY);
+    // char Elem(Level& level, int a_obst, int b_obst);
+    bool CheckCoords(Level& level, int obstX, int obstY, int futureX, int futureY);
     void UpdateFlags(bool& local_flag_break, bool& flag_fall, bool& flag_exit, bool& flag_FinalExit,
-        std::string& chars, int obstX, int obstY);
+        Level& level, int obstX, int obstY);
     
     
     Point GetCoords() { return coords; }

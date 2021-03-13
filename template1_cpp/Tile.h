@@ -14,7 +14,8 @@ enum TileType
     MAN,
     THORN,
     EXIT,
-    FINAL_EXIT
+    FINAL_EXIT,
+    EMPTY
 };
 
 

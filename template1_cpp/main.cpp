@@ -54,16 +54,16 @@ void OnKeyboardPressed(GLFWwindow* window, int key, int scancode, int action, in
 	}
 }
 
-void processPlayerMovement(Player& player, std::string& chars)
+void processPlayerMovement(Player& player, Level& level)
 {
 	if (Input.keys[GLFW_KEY_W])
-		player.ProcessInput(MovementDir::UP, chars, flag_stop, flag_fall, flag_exit, flag_final_exit);
+		player.MyProcessInput(MovementDir::UP, level, flag_stop, flag_fall, flag_exit, flag_final_exit);
 	else if (Input.keys[GLFW_KEY_S])
-		player.ProcessInput(MovementDir::DOWN, chars, flag_stop, flag_fall, flag_exit, flag_final_exit);
+		player.MyProcessInput(MovementDir::DOWN, level, flag_stop, flag_fall, flag_exit, flag_final_exit);
 	if (Input.keys[GLFW_KEY_A])
-		player.ProcessInput(MovementDir::LEFT, chars, flag_stop, flag_fall, flag_exit, flag_final_exit);
+		player.MyProcessInput(MovementDir::LEFT, level, flag_stop, flag_fall, flag_exit, flag_final_exit);
 	else if (Input.keys[GLFW_KEY_D])
-		player.ProcessInput(MovementDir::RIGHT, chars, flag_stop, flag_fall, flag_exit, flag_final_exit);
+		player.MyProcessInput(MovementDir::RIGHT, level, flag_stop, flag_fall, flag_exit, flag_final_exit);
 }
 
 void OnMouseButtonClicked(GLFWwindow* window, int button, int action, int mods)
@@ -275,6 +275,7 @@ int main(int argc, char** argv) {
 	Tile::addImage(TileType::THORN, "resources\\thorn.png");
 	Tile::addImage(TileType::EXIT, "resources\\exit.png");
 	Tile::addImage(TileType::FINAL_EXIT, "resources\\finalExit.jpg");
+    Tile::images[TileType::EMPTY] = new Image(TILE_WIDTH, TILE_HEIGHT, 4);
 
 
 	// std::string chars1 = "", chars2 = "", chars3 = "", chars4 = "";
@@ -322,7 +323,7 @@ int main(int argc, char** argv) {
 		lastFrame = currentFrame;
 		glfwPollEvents();
 
-		processPlayerMovement(player, charsCur);
+		processPlayerMovement(player, level1);
 		restoreBackGround(screenBuffer, *(Tile::images[TileType::FLOOR]), player);
 		player.DrawOfPlayer(screenBuffer, *(Tile::images[TileType::MAN]));
 		 
