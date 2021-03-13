@@ -1,4 +1,6 @@
+#include "common.h"
 #include"Level.h"
+#include<iostream>
 
 Level::Level(const std::string& path) { // TO DO optimize read file
     std::ifstream room_file(path);

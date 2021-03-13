@@ -23,3 +23,5 @@ Tile::Tile(char type_o) {
     default: break;
     }
 }
+
+//static void Tile::addImage(TileType type, const std::string& path) { images[type] = Image(path); }

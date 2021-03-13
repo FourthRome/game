@@ -19,10 +19,8 @@ int curX = 0;
 int curY = WINDOW_HEIGHT - TILE_HEIGHT;
 double EPSILON = 0.00001;
 
-map<TileType, Image*> images; // clear
-void addImage(TileType type, const std::string& path) {
-	images[type] = Image(path); 
-}
+//map<TileType, Image*> images; // clear
+//void addImage(TileType type, const std::string& path) {	images[type] = Image(path); }
 
 struct InputState
 {
@@ -256,8 +254,8 @@ int main(int argc, char** argv) {
 
 
 	Image screenBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, 4);// 4 - number of channels
-	Image gameOver("resources\\gameOver.jpg");
-	Image gameWin("resources\\win.jpg");
+	Image gameOver("..resources/gameOver.jpg");
+	Image gameWin("..resources/win.jpg");
     /*Image floor("resources\\floor.png");
 	Image wall("resources\\wall.png");
 	Image man("resources\\man.png");
@@ -267,8 +265,8 @@ int main(int argc, char** argv) {
 	Image gameOver("resources\\gameOver.jpg");
 	Image gameWin("resources\\win.jpg");
 	*/
-	images.clear(); // Tile::imeges{};
-	addImage(TileType::FLOOR, "resources\\floor.png");
+	//std::map<std::string, Image*> Tile::images = nullptr;// = nullptr; // Tile::imeges{};
+	Tile::addImage(Tile::images, TileType::FLOOR, "..resources/floor.png");
 	//Tile::addImage(Tile::WALL, "resources\\wall.png");
 	//Tile::addImage(Tile::MAN, "resources\\man.png");
 	//Tile::addImage(Tile::THORN, "resources\\thorn.png");
@@ -322,12 +320,11 @@ int main(int argc, char** argv) {
 		glfwPollEvents();
 
 		processPlayerMovement(player, charsCur);
-		restoreBackGround(screenBuffer, *(images[TileType::FLOOR]), player);
-		player.DrawOfPlayer(screenBuffer, *(images[TileType::MAN]));
-		
-		if (flag_stop) {
-
-		} 
+		TileType tileType1(FLOOR);
+		restoreBackGround(screenBuffer, Tile::images[tileType1], player);
+		TileType tileType2(MAN);
+		player.DrawOfPlayer(screenBuffer, Tile::images[tileType2]);
+		 
 
 		if (flag_fall) {
 			curX = 0;

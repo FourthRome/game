@@ -222,8 +222,6 @@ void Player::DrawOfPlayer(Image& screen, Image& man) {
     for (int y = coords.y; y < coords.y + man.Height(); ++y) { // or <=
         for (int x = coords.x; x < coords.x + man.Width(); ++x) { // or <=
             screen.PutPixel(x, y, man.GetPixel(x - coords.x, (y - coords.y)));
-            //screen.PutPixel(x, y, color);
         }
     }
-    //std::cout << "coords.x = " << coords.x << "coords.y = " << coords.y << std::endl;
 }

@@ -32,7 +32,7 @@ struct Player
         std::string& chars, int obstX, int obstY);
     
     
-Point GetCoords() { return coords; }
+    Point GetCoords() { return coords; }
     Point GetOldCoords() { return old_coords; }
     void PutCoords(int x, int y) { coords.x = x; coords.y = y; } // void PutCoords(int x, int y, Point coords) {...}
     //void PutStartCoords(int x, int y) { start_coords.x = x; start_coords.y = y; } //void PutStartCoords(int x, int y, Point coords) { ... }
